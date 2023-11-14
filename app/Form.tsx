@@ -33,6 +33,8 @@ const GenericForm = <T extends Record<string, any>>({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    console.log(formData);
+
     onSubmit(formData);
   };
 

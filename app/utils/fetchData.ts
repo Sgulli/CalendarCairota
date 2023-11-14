@@ -1,3 +1,3 @@
-export default function fetchData(opts: RequestInfo) {
-  return fetch(opts);
+export default async function fetchData(url: string, opts: RequestInit) {
+  return fetch(url, opts);
 }
