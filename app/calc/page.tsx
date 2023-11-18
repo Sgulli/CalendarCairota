@@ -2,11 +2,11 @@
 import React, { useState, ChangeEvent } from "react";
 import TextInput from "../TextInput";
 import fetchData from "../utils/fetchData";
-import axios from "axios";
 
 export default function Calc() {
   const [nameValue, setNameValue] = useState<string>("");
   const [birthdateValue, setBirthdateValue] = useState<string>("");
+  const [response, setResponse] = useState<string>("");
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNameValue(e.target.value);
   };
@@ -17,18 +17,15 @@ export default function Calc() {
   const sendData = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(birthdateValue);
+    const res = await fetchData("/api/calc", {
+      method: "POST",
+      body: JSON.stringify({ birthdate: birthdateValue }),
+      headers: { "Content-Type": "application/json" },
+    });
 
-    const request = await axios.post(
-      "/api/calc",
-      { birtdate: birthdateValue },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log(request.request);
+    const { birthdate } = await res.json();
+
+    setResponse(birthdate);
   };
   return (
     <div className="flex min-h-screen max-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -65,6 +62,9 @@ export default function Calc() {
             </button>
           </div>
         </form>
+      </div>
+      <div className="flex-col justify-center text-center px-6 py-12 lg:px-8">
+        <span className="">{response}</span>
       </div>
     </div>
   );
